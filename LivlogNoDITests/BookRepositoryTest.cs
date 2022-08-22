@@ -1,12 +1,11 @@
 using LivlogNoDI.Data.Repositories;
-using LivlogNoDI.Data.Repositories.Interfaces;
 using LivlogNoDI.Models.Entities;
 
 namespace LivlogNoDITests
 {
     public class BookRepositoryTest
     {
-        IBookRepository _repo { get; set; }
+        BookRepository _repo { get; set; }
 
         public BookRepositoryTest()
         {

@@ -1,6 +1,5 @@
 ﻿using LivlogNoDI.Models.DTO;
 using LivlogNoDI.Services;
-using LivlogNoDI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LivlogNoDI.Controllers
@@ -9,7 +8,7 @@ namespace LivlogNoDI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IBookService _service;
+        private readonly BookService _service;
 
         public BooksController()
         {

@@ -1,14 +1,12 @@
 ﻿using LivlogNoDI.Data.Repositories;
-using LivlogNoDI.Data.Repositories.Interfaces;
 using LivlogNoDI.Models.DTO;
 using LivlogNoDI.Models.Entities;
-using LivlogNoDI.Services.Interfaces;
 
 namespace LivlogNoDI.Services
 {
-    public class BookService : IBookService
+    public class BookService
     {
-        private readonly IBookRepository _repo;
+        private readonly BookRepository _repo;
 
         public BookService()
         {

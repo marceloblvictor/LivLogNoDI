@@ -1,10 +1,9 @@
-﻿using LivlogNoDI.Data.Repositories.Interfaces;
-using LivlogNoDI.Models.Entities;
+﻿using LivlogNoDI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LivlogNoDI.Data.Repositories
 {
-    public class BookRepository : IBookRepository
+    public class BookRepository
     {
         private readonly LivlogNoDIContext _dbContext;
 
