@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivlogNoDI", "LivlogNoDI.csproj", "{422C266C-D427-495F-BE3B-16DF45D4ABDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LivlogNoDI", "LivlogNoDI.csproj", "{422C266C-D427-495F-BE3B-16DF45D4ABDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivlogNoDITests", "..\LivlogNoDITests\LivlogNoDITests.csproj", "{6784E3F0-4627-45B3-9796-FCDA48CB79BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LivlogNoDITests", "..\LivlogNoDITests\LivlogNoDITests.csproj", "{6784E3F0-4627-45B3-9796-FCDA48CB79BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

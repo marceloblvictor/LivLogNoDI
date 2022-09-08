@@ -6,53 +6,53 @@ namespace LivlogNoDI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class CustomersController : ControllerBase
     {
-        private readonly BookService _service;
+        private readonly CustomerService _service;
 
-        public BooksController()
+        public CustomersController()
         {
-            _service = new BookService();
+            _service = new CustomerService();
         }
 
         /// <summary>
-        /// Obter todos os livros.
+        /// Obter todos os clientes.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<IEnumerable<BookDTO>> GetAll()
+        public ActionResult<IEnumerable<CustomerDTO>> GetAll()
             => Ok(_service.GetAll());
 
         /// <summary>
-        /// Obter um livro pelo Id.
+        /// Obter um cliente por Id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public ActionResult<BookDTO> Get(int id)
+        public ActionResult<CustomerDTO> Get(int id)
             => Ok(_service.Get(id));
 
         /// <summary>
-        /// Criar um livro.
+        /// Criar um cliente.
         /// </summary>
-        /// <param name="bookDTO"></param>
+        /// <param name="customerDTO"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult<BookDTO> Create(BookDTO bookDTO)
-            => Ok(_service.Create(bookDTO));
+        public ActionResult<CustomerDTO> Create(CustomerDTO customerDTO)
+            => Ok(_service.Create(customerDTO));
 
         /// <summary>
-        /// Atualizar um livro.
+        /// Atualizar um cliente.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="bookDTO"></param>
+        /// <param name="customerDTO"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public ActionResult<BookDTO> Update(int id, BookDTO bookDTO)
-            => Ok(_service.Update(id, bookDTO));
+        public ActionResult<CustomerDTO> Update(int id, CustomerDTO customerDTO)
+            => Ok(_service.Update(id, customerDTO));
 
         /// <summary>
-        /// Deletar um livro.
+        /// Deletar um cliente.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

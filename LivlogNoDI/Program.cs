@@ -1,16 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using LivlogNoDI.Data;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<LivlogNoDIContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LivlogNoDIContext") ?? throw new InvalidOperationException("Connection string 'LivlogNoDIContext' not found.")));
+﻿
+using System.Reflection;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(s =>
+{
+    var xmlFile = $"APIDocumentation.XML";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    //... and tell Swagger to use those XML comments.
+    s.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 

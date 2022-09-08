@@ -3,59 +3,59 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LivlogNoDI.Data.Repositories
 {
-    public class BookRepository
+    public class CustomerBookRepository
     {
         private readonly LivlogNoDIContext _dbContext;
 
-        public BookRepository()
+        public CustomerBookRepository()
         {
             _dbContext = new LivlogNoDIContext(
                 new DbContextOptions<LivlogNoDIContext>());
         }
 
-        public List<Book> GetAll()
+        public List<CustomerBook> GetAll()
         {
-            return _dbContext.Books
+            return _dbContext.CustomerBooks
                 .AsNoTracking()
                 .OrderByDescending(b => b.Id)
                 .ToList();
         }
 
-        public Book Get(int bookId)
+        public CustomerBook Get(int id)
         {
-            return _dbContext.Books
+            return _dbContext.CustomerBooks
                 .AsNoTracking()
-                .Where(b => b.Id == bookId)
+                .Where(b => b.Id == id)
                 .SingleOrDefault()
                     ?? throw new ArgumentException();
         }
 
-        public Book Add(Book book)
+        public CustomerBook Add(CustomerBook customerBook)
         {
-            _dbContext.Books.Add(book);
+            _dbContext.CustomerBooks.Add(customerBook);
             _dbContext.SaveChanges();
 
-            return book;
+            return customerBook;
         }
 
-        public Book Update(Book book)
+        public CustomerBook Update(CustomerBook customerBook)
         {
-            _dbContext.Books.Update(book);
+            _dbContext.CustomerBooks.Update(customerBook);
             _dbContext.SaveChanges();
 
-            return book;
+            return customerBook;
         }
 
-        public void Delete(int bookId)
+        public void Delete(int id)
         {
-            var book = Get(bookId);
+            var customerBook = Get(id);
 
-            if (book is null)
+            if (customerBook is null)
             {
                 throw new ArgumentException();
             }
             
-            _dbContext.Remove(book);
+            _dbContext.Remove(customerBook);
             _dbContext.SaveChanges();            
         }
     }

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LivlogNoDI</name>
+    </assembly>
+    <members>
+        <member name="M:LivlogNoDI.Controllers.BooksController.GetAll">
+            <summary>
+            Obter todos os livros.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.BooksController.Get(System.Int32)">
+            <summary>
+            Obter um livro pelo Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.BooksController.Create(LivlogNoDI.Models.DTO.BookDTO)">
+            <summary>
+            Criar um livro.
+            </summary>
+            <param name="bookDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.BooksController.Update(System.Int32,LivlogNoDI.Models.DTO.BookDTO)">
+            <summary>
+            Atualizar um livro.
+            </summary>
+            <param name="id"></param>
+            <param name="bookDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.BooksController.Delete(System.Int32)">
+            <summary>
+            Deletar um livro.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.GetAll">
+            <summary>
+            Obter todos os livros de clientes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.Get(System.Int32)">
+            <summary>
+            Obter um livro de cliente por Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomersController.GetAll">
+            <summary>
+            Obter todos os clientes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomersController.Get(System.Int32)">
+            <summary>
+            Obter um cliente por Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomersController.Create(LivlogNoDI.Models.DTO.CustomerDTO)">
+            <summary>
+            Criar um cliente.
+            </summary>
+            <param name="customerDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomersController.Update(System.Int32,LivlogNoDI.Models.DTO.CustomerDTO)">
+            <summary>
+            Atualizar um cliente.
+            </summary>
+            <param name="id"></param>
+            <param name="customerDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomersController.Delete(System.Int32)">
+            <summary>
+            Deletar um cliente.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
