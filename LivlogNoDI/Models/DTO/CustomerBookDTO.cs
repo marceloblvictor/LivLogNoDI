@@ -1,4 +1,6 @@
-﻿namespace LivlogNoDI.Models.DTO
+﻿using LivlogNoDI.Enums;
+
+namespace LivlogNoDI.Models.DTO
 {
     public class CustomerBookDTO
     {
@@ -7,5 +9,6 @@
         public int CustomerId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime DueDate { get; set; }
+        public BookRentalStatus Status { get; set; }
     }
 }
