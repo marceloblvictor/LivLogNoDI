@@ -16,7 +16,6 @@ namespace LivlogNoDI.Data.Repositories
         public List<Customer> GetAll()
         {
             return _dbContext.Customers
-                .AsNoTracking()
                 .Include(c => c.CustomerBooks)
                 .OrderByDescending(b => b.Id)
                 .ToList();
@@ -26,7 +25,6 @@ namespace LivlogNoDI.Data.Repositories
         {
             return _dbContext.Customers
                 .Include(c => c.CustomerBooks)
-                .AsNoTracking()
                 .Where(b => b.Id == id)
                 .SingleOrDefault()
                     ?? throw new ArgumentException();

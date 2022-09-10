@@ -37,7 +37,7 @@ namespace LivlogNoDI.Controllers
         /// </summary>
         /// <param name="customerId"></param>
         /// <returns></returns>
-        [HttpGet("/by-customer/")]
+        [HttpGet("by-customer")]
         public ActionResult<IEnumerable<CustomerBookDTO>> GetByCustomer([FromQuery] int customerId)
             => Ok(_service.GetByCustomer(customerId));
 
@@ -61,7 +61,7 @@ namespace LivlogNoDI.Controllers
         /// Alugar livros.
         /// </summary>
         /// <returns></returns>
-        [HttpPost("/rent")]
+        [HttpPost("rent")]
         public ActionResult<CustomerBookDTO> RentBooks([FromBody] CustomerBooksRequestDTO request)
             => Ok(_service.RentBooks(request));
 
@@ -69,7 +69,7 @@ namespace LivlogNoDI.Controllers
         /// Devolver Livros.
         /// </summary>
         /// <returns></returns>
-        [HttpPost("/return")]
+        [HttpPost("return")]
         public ActionResult<CustomerBookDTO> ReturnBooks([FromBody] IList<int> customerbookIds)
             => Ok(_service.ReturnBooks(customerbookIds));
 
@@ -77,11 +77,11 @@ namespace LivlogNoDI.Controllers
         /// Enviar email para avisar ao cliente que ele deve fazer a devolução do livro no dia seguinte.
         /// </summary>
         /// <returns></returns>
-        [HttpPost("/send-reminder")]
+        [HttpPost("send-reminder")]
         public ActionResult SendReminderToCustomer([FromBody] int customerId)
             => Ok(_service.SendReminderToCustomer(customerId));
 
-        
+        // Renovar aluguel de livro de cliente.
 
         // Adicionar cliente na lista de espera por livro.
 

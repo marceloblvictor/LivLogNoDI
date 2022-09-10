@@ -17,7 +17,6 @@ namespace LivlogNoDI.Data.Repositories
         {
             return _dbContext.Books
                 .Include(b => b.CustomerBooks)
-                .AsNoTracking()
                 .OrderByDescending(b => b.Id)
                 .ToList();
         }
@@ -26,7 +25,6 @@ namespace LivlogNoDI.Data.Repositories
         {
             return _dbContext.Books
                 .Include(b => b.CustomerBooks)
-                .AsNoTracking()
                 .Where(b => b.Id == bookId)
                 .SingleOrDefault()
                     ?? throw new ArgumentException();

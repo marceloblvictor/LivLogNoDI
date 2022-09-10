@@ -10,15 +10,21 @@ namespace LivlogNoDI.Services
     public class CustomerBookService
     {
         private readonly CustomerBookRepository _repo;
+
         private readonly CustomerService _customerService;
         private readonly BookService _bookService;
+        private readonly FineService _fineService;
+
         private readonly BookRentalValidator _rentalValidator;
         
         public CustomerBookService()
         {
             _repo = new CustomerBookRepository();
+
             _customerService = new CustomerService();
             _bookService = new BookService();
+            _fineService = new FineService();
+
             _rentalValidator = new BookRentalValidator();
         }
 
@@ -67,6 +73,15 @@ namespace LivlogNoDI.Services
         {
             // Obter cliente 
             var customer = _customerService.Get(request.CustomerId);
+
+            // Verifica se o usuário possui alguma dívida em aberto
+            var allFines = _fineService
+                .GetAll()
+                .ToList();
+
+            _rentalValidator.ValidateCustomerIsInDebt(
+                allFines, 
+                customer);
 
             // Obter os livros requisitados
             var requestedBooks = _bookService.FilterByIds(
@@ -117,20 +132,76 @@ namespace LivlogNoDI.Services
 
         public IList<CustomerBookDTO> ReturnBooks(IList<int> customerBookIds)
         {
-            var returnedCustomerBooks = FilterByIds(GetAll(), customerBookIds);
+            var returnedCustomerBooks = FilterByIds(
+                GetAll(), 
+                customerBookIds);
+
+            _rentalValidator.ValidateReturnedBooksSameCustomer(
+                returnedCustomerBooks);
 
             DateTime currentDateTime = DateTime.Now;
+
+            // TODO: apagar próxima linha! SOMENTE PARA TESTE DE LIVROS ATRASADOS!!
+            // currentDateTime = currentDateTime.AddDays(20);
+
+            // Verifica se tem algum livro em atraso e cria multa, caso exista
+            foreach (var returnedBook in returnedCustomerBooks)
+            {
+                if (IsReturnedBookOverdue(returnedBook, currentDateTime))
+                {
+                    var overdueDays = GetOverdueDays(returnedBook.DueDate, currentDateTime);
+
+                    _fineService.FineCustomer(
+                        returnedBook.CustomerId,
+                        overdueDays);
+                }
+            }
+
+            returnedCustomerBooks = SetCustomerBookStatusToReturned(
+                returnedCustomerBooks);
+
+            foreach (var returnedBook in returnedCustomerBooks)
+            {
+                Update(returnedBook.Id, returnedBook);
+            }
+
+            // SendReturnalNotification();
 
             return returnedCustomerBooks;
         }
 
         public bool SendReminderToCustomer(int customerId)
         {
+            // _messager.SendEmail();
+
             return true;
         }
 
-
         #region Helper Methods
+
+        public IList<CustomerBookDTO> SetCustomerBookStatusToReturned(IList<CustomerBookDTO> returnedCustomerBooks)
+        {
+            foreach (var returnedBook in returnedCustomerBooks)
+            {
+                _rentalValidator.ValidateReturnedBookStatus(returnedBook);
+
+                returnedBook.Status = BookRentalStatus.Returned;
+            }
+
+            return returnedCustomerBooks;
+        }
+
+        public int GetOverdueDays(DateTime dueDate, DateTime returnDate)
+        {
+            return (returnDate - dueDate).Days;
+        }
+
+        public bool IsReturnedBookOverdue(
+            CustomerBookDTO customerBook,
+            DateTime returnDate)
+        {
+            return returnDate > customerBook.DueDate;
+        }
 
         public DateTime CalculateDueDate(CustomerDTO customer, DateTime startTime)
         {

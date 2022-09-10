@@ -1,4 +1,5 @@
 ﻿using LivlogNoDI.Data.Repositories;
+using LivlogNoDI.Enums;
 using LivlogNoDI.Models.DTO;
 using LivlogNoDI.Models.Entities;
 
@@ -56,6 +57,15 @@ namespace LivlogNoDI.Services
             return _repo.Delete(id);            
         }
 
+        #region Helper methods
+
+        public CustomerCategory GetCustomerCategory(int id)
+        {
+            var customer = Get(id);
+
+            return customer.Category;
+        }
+
         private CustomerDTO CreateDTO(Customer customer)
         {
             return new CustomerDTO
@@ -91,5 +101,9 @@ namespace LivlogNoDI.Services
                 Category = dto.Category
             };
         }
+
+        #endregion
+
+
     }
 }

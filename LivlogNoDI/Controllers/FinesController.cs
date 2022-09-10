@@ -23,10 +23,28 @@ namespace LivlogNoDI.Controllers
         public ActionResult<IEnumerable<FineDTO>> GetAll()
             => Ok(_service.GetAll());
 
-        // Obter multas de um cliente.
+        /// <summary>
+        /// Obter o valor total devido por um cliente.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("debts/{customerId}")]
+        public ActionResult<decimal> GetCustomerDebts(int customerId)
+            => Ok(_service.GetCustomerDebts(customerId));
 
-        // Registrar pagamento de multa por cliente.
+        /// <summary>
+        /// Registrar pagamento de multa por cliente.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPatch("{fineId}")]
+        public ActionResult<BookDTO> RegisterPayment(int fineId, decimal amountPaid)
+            => Ok(_service.UpdateFineToPaid(fineId, amountPaid));
 
-
+        /// <summary>
+        /// Deletar uma multa.
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public ActionResult<bool> Delete(int id)
+            => Ok(_service.Delete(id));
     }
 }

@@ -1,6 +1,4 @@
-﻿
-using System.Reflection;
-using LivlogNoDI.Data;
+﻿using LivlogNoDI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +10,13 @@ builder.Services.AddSwaggerGen(s =>
     var xmlFile = $"APIDocumentation.XML";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-    //... and tell Swagger to use those XML comments.
     s.IncludeXmlComments(xmlPath);
 });
 
 builder.Services.AddDbContext<LivlogNoDIContext>();
+
+builder.Services.Configure<RouteOptions>(
+    options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 

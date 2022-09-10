@@ -15,6 +15,6 @@
         /// <summary>
         /// O cliente devolveu o livro. Pode haver ou não uma multa.
         /// </summary>
-        Finished = 3
+        Returned = 3
     }
 }

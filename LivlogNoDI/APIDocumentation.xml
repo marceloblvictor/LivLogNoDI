@@ -130,6 +130,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:LivlogNoDI.Controllers.FinesController.GetCustomerDebts(System.Int32)">
+            <summary>
+            Obter o valor total devido por um cliente.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.FinesController.RegisterPayment(System.Int32,System.Decimal)">
+            <summary>
+            Registrar pagamento de multa por cliente.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.FinesController.Delete(System.Int32)">
+            <summary>
+            Deletar uma multa.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="F:LivlogNoDI.Enums.BookRentalStatus.Active">
             <summary>
             O livro está na posse do cliente.
@@ -140,7 +158,7 @@
             O cliente está na fila de espera para alugar o livro.
             </summary>
         </member>
-        <member name="F:LivlogNoDI.Enums.BookRentalStatus.Finished">
+        <member name="F:LivlogNoDI.Enums.BookRentalStatus.Returned">
             <summary>
             O cliente devolveu o livro. Pode haver ou não uma multa.
             </summary>
