@@ -21,6 +21,7 @@ namespace LivlogNoDI.Data
         public DbSet<Book> Books { get; set; } = default!;
         public DbSet<Customer> Customers { get; set; } = default!;
         public DbSet<CustomerBook> CustomerBooks { get; set; } = default!;
+        public DbSet<Fine> Fines { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +37,11 @@ namespace LivlogNoDI.Data
                 .HasOne(cb => cb.Book)
                     .WithMany(b => b.CustomerBooks)
                 .HasForeignKey(cb => cb.BookId);
+
+            modelBuilder.Entity<Fine>()
+                .HasOne(f => f.Customer)
+                    .WithMany(c => c.Fines)
+                .HasForeignKey(f => f.CustomerId);
         }
     }
 }

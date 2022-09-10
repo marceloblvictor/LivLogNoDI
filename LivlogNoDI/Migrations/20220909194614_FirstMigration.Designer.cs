@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LivlogNoDI.Migrations
 {
     [DbContext(typeof(LivlogNoDIContext))]
-    [Migration("20220906210515_SetCustomerBookEntities")]
-    partial class SetCustomerBookEntities
+    [Migration("20220909194614_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,7 +68,7 @@ namespace LivlogNoDI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("LivlogNoDI.Models.Entities.CustomerBook", b =>
@@ -91,13 +91,16 @@ namespace LivlogNoDI.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("CustomerBook");
+                    b.ToTable("CustomerBooks");
                 });
 
             modelBuilder.Entity("LivlogNoDI.Models.Entities.CustomerBook", b =>

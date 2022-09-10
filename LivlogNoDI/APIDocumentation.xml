@@ -52,6 +52,43 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.GetByCustomer(System.Int32)">
+            <summary>
+            Obter os livros de clientes de um determinado cliente.
+            </summary>
+            <param name="customerId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.UpdateBookRentalData(System.Int32,LivlogNoDI.Models.DTO.CustomerBookDTO)">
+            <summary>
+            Atualizar os dados de um livro de cliente.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.Delete(System.Int32)">
+            <summary>
+            Deletar um registro de livro de cliente.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.RentBooks(LivlogNoDI.Models.DTO.CustomerBooksRequestDTO)">
+            <summary>
+            Alugar livros.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.ReturnBooks(System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Devolver Livros.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.SendReminderToCustomer(System.Int32)">
+            <summary>
+            Enviar email para avisar ao cliente que ele deve fazer a devolução do livro no dia seguinte.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:LivlogNoDI.Controllers.CustomersController.GetAll">
             <summary>
             Obter todos os clientes.
@@ -86,6 +123,27 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.FinesController.GetAll">
+            <summary>
+            Obter todas as multas.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:LivlogNoDI.Enums.BookRentalStatus.Active">
+            <summary>
+            O livro está na posse do cliente.
+            </summary>
+        </member>
+        <member name="F:LivlogNoDI.Enums.BookRentalStatus.WaitingQueue">
+            <summary>
+            O cliente está na fila de espera para alugar o livro.
+            </summary>
+        </member>
+        <member name="F:LivlogNoDI.Enums.BookRentalStatus.Finished">
+            <summary>
+            O cliente devolveu o livro. Pode haver ou não uma multa.
+            </summary>
         </member>
     </members>
 </doc>

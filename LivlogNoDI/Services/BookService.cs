@@ -26,7 +26,7 @@ namespace LivlogNoDI.Services
 
             return CreateDTOs(books);
         }
-
+        
         public BookDTO Create(BookDTO bookDTO)
         {
             var book = CreateEntity(bookDTO);
@@ -50,9 +50,9 @@ namespace LivlogNoDI.Services
             return CreateDTO(updatedBook);
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
-            _repo.Delete(id);            
+            return _repo.Delete(id);            
         }
 
         private BookDTO CreateDTO(Book book)
@@ -66,7 +66,8 @@ namespace LivlogNoDI.Services
             };
         }
 
-        private IEnumerable<BookDTO> CreateDTOs(IEnumerable<Book> books)
+        #region Helper Methods
+        public IEnumerable<BookDTO> CreateDTOs(IEnumerable<Book> books)
         {
             var booksDtos = new List<BookDTO>();
 
@@ -78,7 +79,7 @@ namespace LivlogNoDI.Services
             return booksDtos;
         }
 
-        private Book CreateEntity(BookDTO dto)
+        public Book CreateEntity(BookDTO dto)
         {
             return new Book
             {
@@ -88,5 +89,15 @@ namespace LivlogNoDI.Services
                 Quantity = dto.Quantity
             };
         }
+
+        public IList<BookDTO> FilterByIds(IEnumerable<BookDTO> books, IList<int> ids)
+        {
+            return books
+                .Where(b => ids.Contains(b.Id))
+                .ToList();
+        }
+
+        #endregion
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace LivlogNoDI.Models.DTO
 {
-    public class RentalRequestDTO
+    public class CustomerBooksRequestDTO
     {        
         public int CustomerId { get; set; }
         public IList<int> BookIds { get; set; }

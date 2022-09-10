@@ -51,9 +51,9 @@ namespace LivlogNoDI.Services
             return CreateDTO(updatedCustomer);
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
-            _repo.Delete(id);            
+            return _repo.Delete(id);            
         }
 
         private CustomerDTO CreateDTO(Customer customer)

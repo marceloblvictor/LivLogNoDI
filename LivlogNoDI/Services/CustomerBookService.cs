@@ -36,15 +36,42 @@ namespace LivlogNoDI.Services
             return CreateDTOs(customerBooks);
         }
 
-        public IList<CustomerBookDTO> RentBooks(RentalRequestDTO request)
+        public IList<CustomerBookDTO> GetByCustomer(int customerId)
+        {
+            var allCustomerBooks = GetAll();
+            var customerBooks = FilterByCustomer(allCustomerBooks, customerId);
+
+            return customerBooks;
+        }        
+
+        public CustomerBookDTO Update(int customerBookId, CustomerBookDTO customerBookDTO)
+        {
+            var customerBook = _repo.Get(customerBookId);
+
+            customerBook.StartDate = customerBookDTO.StartDate;
+            customerBook.DueDate = customerBookDTO.DueDate;
+            customerBook.Status = customerBookDTO.Status;
+
+            var updatedBook =
+                _repo.Update(customerBook);
+
+            return CreateDTO(updatedBook);
+        }
+
+        public bool Delete(int id)
+        {
+            return _repo.Delete(id);
+        }
+
+        public IList<CustomerBookDTO> RentBooks(CustomerBooksRequestDTO request)
         {
             // Obter cliente 
             var customer = _customerService.Get(request.CustomerId);
 
             // Obter os livros requisitados
-            var requestedBooks = _bookService.GetAll()
-                .Where(b => request.BookIds.Contains(b.Id))
-                .ToList();
+            var requestedBooks = _bookService.FilterByIds(
+                _bookService.GetAll(), 
+                request.BookIds);
 
             // Obter todos os livros de todos os clientes
             var allCustomerBooks = GetAll();
@@ -68,27 +95,40 @@ namespace LivlogNoDI.Services
                 requestedBooks,
                 allCustomerBooks);
 
-            DateTime currentDateTime = DateTime.UtcNow;
+            DateTime currentDateTime = DateTime.Now;
 
             // Calcula o prazo do empréstimo do cliente baseado em sua categoria
             var customerDueDate = CalculateDueDate(customer, currentDateTime);
 
+            var customerBooksCreated = new List<CustomerBook>();
+
             // Cria uma nova entidade CustomerBook para cada livro alugado
             foreach (int bookId in request.BookIds)
             {
-                _repo.Add(
-                    CreateEntity(request.CustomerId, bookId, customerDueDate));
+                customerBooksCreated.Add(
+                    _repo.Add(CreateEntity(request.CustomerId, bookId, customerDueDate)));
             }
 
             // Retorna uma lista com informações dos livros alugados pelo cliente
-            var rentedBookDtos = CreateDTOs(_repo.GetAll());
-            rentedBookDtos = FilterByCustomerAndBook(
-                rentedBookDtos,
-                request.CustomerId,
-                request.BookIds);
+            var rentedBookDtos = CreateDTOs(customerBooksCreated);
 
             return rentedBookDtos;
         }
+
+        public IList<CustomerBookDTO> ReturnBooks(IList<int> customerBookIds)
+        {
+            var returnedCustomerBooks = FilterByIds(GetAll(), customerBookIds);
+
+            DateTime currentDateTime = DateTime.Now;
+
+            return returnedCustomerBooks;
+        }
+
+        public bool SendReminderToCustomer(int customerId)
+        {
+            return true;
+        }
+
 
         #region Helper Methods
 
@@ -145,14 +185,27 @@ namespace LivlogNoDI.Services
                 .ToList();
         }
 
+        public IList<CustomerBookDTO> FilterByIds(
+            IEnumerable<CustomerBookDTO> customerBooks, 
+            IList<int> ids)
+        {
+            return customerBooks
+                .Where(cb => ids.Contains(cb.Id))
+                .ToList();
+        }
+
         public CustomerBookDTO CreateDTO(CustomerBook customerBook)
         {
             return new CustomerBookDTO
             {
                 Id = customerBook.Id,
                 BookId = customerBook.BookId,
+                BookTitle = customerBook.Book.Title,
                 CustomerId = customerBook.CustomerId,
-                StartDate = customerBook.DueDate
+                CustomerName = customerBook.Customer.Name,
+                StartDate = customerBook.StartDate,
+                DueDate = customerBook.DueDate,
+                Status = customerBook.Status
             };
         }
 
@@ -168,7 +221,10 @@ namespace LivlogNoDI.Services
             return customerBooksDtos;
         }
 
-        public CustomerBook CreateEntity(int customerId, int bookId, DateTime dueDate)
+        public CustomerBook CreateEntity(
+            int customerId, 
+            int bookId, 
+            DateTime dueDate)
         {
             return new CustomerBook
             {

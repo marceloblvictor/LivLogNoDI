@@ -1,5 +1,6 @@
 ﻿
 using System.Reflection;
+using LivlogNoDI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen(s =>
     //... and tell Swagger to use those XML comments.
     s.IncludeXmlComments(xmlPath);
 });
+
+builder.Services.AddDbContext<LivlogNoDIContext>();
 
 var app = builder.Build();
 

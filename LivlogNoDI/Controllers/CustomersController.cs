@@ -57,11 +57,7 @@ namespace LivlogNoDI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public ActionResult<bool> Delete(int id)
-        {
-            _service.Delete(id);
-
-            return Ok();
-        }
+        public ActionResult<bool> Delete(int id) 
+            => Ok(_service.Delete(id));
     }
 }

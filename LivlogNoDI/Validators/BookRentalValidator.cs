@@ -26,7 +26,7 @@ namespace LivlogNoDI.Validators
             {
                 // Conta quantos exemplares do livro requisitado estão alugados
                 int booksTakenCount = allBooks
-                    .Where(b => b.Id == book.Id && 
+                    .Where(b => b.BookId == book.Id && 
                                 b.Status == BookRentalStatus.Active)
                     .Count();
 

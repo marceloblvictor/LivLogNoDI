@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LivlogNoDI.Migrations
 {
-    public partial class SetCustomerBookEntities : Migration
+    public partial class FirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,7 +25,7 @@ namespace LivlogNoDI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customer",
+                name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -37,11 +37,11 @@ namespace LivlogNoDI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customer", x => x.Id);
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomerBook",
+                name: "CustomerBooks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -49,46 +49,47 @@ namespace LivlogNoDI.Migrations
                     BookId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<byte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomerBook", x => x.Id);
+                    table.PrimaryKey("PK_CustomerBooks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CustomerBook_Books_BookId",
+                        name: "FK_CustomerBooks_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CustomerBook_Customer_CustomerId",
+                        name: "FK_CustomerBooks_Customers_CustomerId",
                         column: x => x.CustomerId,
-                        principalTable: "Customer",
+                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerBook_BookId",
-                table: "CustomerBook",
+                name: "IX_CustomerBooks_BookId",
+                table: "CustomerBooks",
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerBook_CustomerId",
-                table: "CustomerBook",
+                name: "IX_CustomerBooks_CustomerId",
+                table: "CustomerBooks",
                 column: "CustomerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CustomerBook");
+                name: "CustomerBooks");
 
             migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Customer");
+                name: "Customers");
         }
     }
 }

@@ -3,65 +3,65 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LivlogNoDI.Data.Repositories
 {
-    public class BookRepository
+    public class FineRepository
     {
         private readonly LivlogNoDIContext _dbContext;
 
-        public BookRepository()
+        public FineRepository()
         {
             _dbContext = new LivlogNoDIContext(
                 new DbContextOptions<LivlogNoDIContext>());
         }
 
-        public List<Book> GetAll()
+        public List<Fine> GetAll()
         {
-            return _dbContext.Books
-                .Include(b => b.CustomerBooks)
+            return _dbContext.Fines
+                .Include(f => f.Customer)
                 .AsNoTracking()
                 .OrderByDescending(b => b.Id)
                 .ToList();
         }
 
-        public Book Get(int bookId)
+        public Fine Get(int fineId)
         {
-            return _dbContext.Books
-                .Include(b => b.CustomerBooks)
+            return _dbContext.Fines
+                .Include(f => f.Customer)
                 .AsNoTracking()
-                .Where(b => b.Id == bookId)
+                .Where(f => f.Id == fineId)
                 .SingleOrDefault()
                     ?? throw new ArgumentException();
         }
 
-        public Book Add(Book book)
+        public Fine Add(Fine fine)
         {
-            _dbContext.Books.Add(book);
+            _dbContext.Fines.Add(fine);
             _dbContext.SaveChanges();
 
-            book = Get(book.Id);
+            fine = Get(fine.Id);
 
-            return book;
+            return fine;
         }
 
-        public Book Update(Book book)
+        public Fine Update(Fine fine)
         {
-            _dbContext.Books.Update(book);
+            _dbContext.Fines.Update(fine);
             _dbContext.SaveChanges();
 
-            book = Get(book.Id);
+            fine = Get(fine.Id);
 
-            return book;
+            return fine;
         }
 
-        public bool Delete(int bookId)
+        public bool Delete(int fineId)
         {
-            var book = Get(bookId);
+            var fine = Get(fineId);
 
-            if (book is null)
+            if (fine is null)
             {
                 throw new ArgumentException();
             }
             
-            _dbContext.Remove(book);
+            _dbContext.Remove(fine);
             _dbContext.SaveChanges();
 
             return true;

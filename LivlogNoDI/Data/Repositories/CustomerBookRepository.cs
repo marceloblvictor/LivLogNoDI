@@ -17,6 +17,8 @@ namespace LivlogNoDI.Data.Repositories
         {
             return _dbContext.CustomerBooks
                 .AsNoTracking()
+                .Include(cb => cb.Book)
+                .Include(cb => cb.Customer)
                 .OrderByDescending(b => b.Id)
                 .ToList();
         }
@@ -24,6 +26,8 @@ namespace LivlogNoDI.Data.Repositories
         public CustomerBook Get(int id)
         {
             return _dbContext.CustomerBooks
+                .Include(cb => cb.Book)
+                .Include(cb => cb.Customer)
                 .AsNoTracking()
                 .Where(b => b.Id == id)
                 .SingleOrDefault()
@@ -35,6 +39,8 @@ namespace LivlogNoDI.Data.Repositories
             _dbContext.CustomerBooks.Add(customerBook);
             _dbContext.SaveChanges();
 
+            customerBook = Get(customerBook.Id);
+
             return customerBook;
         }
 
@@ -43,10 +49,12 @@ namespace LivlogNoDI.Data.Repositories
             _dbContext.CustomerBooks.Update(customerBook);
             _dbContext.SaveChanges();
 
+            customerBook = Get(customerBook.Id);
+
             return customerBook;
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             var customerBook = Get(id);
 
@@ -56,7 +64,9 @@ namespace LivlogNoDI.Data.Repositories
             }
             
             _dbContext.Remove(customerBook);
-            _dbContext.SaveChanges();            
+            _dbContext.SaveChanges();
+
+            return true;
         }
     }
 }
