@@ -83,9 +83,28 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.SendReminderToCustomer(System.Int32)">
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.RenewBookRental(System.Collections.Generic.IList{System.Int32})">
             <summary>
-            Enviar email para avisar ao cliente que ele deve fazer a devolução do livro no dia seguinte.
+            Renovar aluguel de livro de cliente.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.GetWaitingList(System.Int32)">
+            <summary>
+            Obter a lista de esperas de um determinado livro.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.AddToWaitingList(LivlogNoDI.Models.DTO.CustomerBooksRequestDTO)">
+            <summary>
+            Adicionar cliente na lista de espera por livro.
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.CustomerBooksController.RemoveFromWaitingList(System.Int32)">
+            <summary>
+            Remover cliente da lista de espera por livro.
             </summary>
             <returns></returns>
         </member>

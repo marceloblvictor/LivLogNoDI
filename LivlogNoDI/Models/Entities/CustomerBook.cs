@@ -7,8 +7,8 @@ namespace LivlogNoDI.Models.Entities
         public int Id { get; set; }
         public int BookId { get; set; }
         public int CustomerId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public BookRentalStatus Status { get; set; }
 
         public Book Book { get; set; }

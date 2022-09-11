@@ -9,8 +9,8 @@ namespace LivlogNoDI.Models.DTO
         public string BookTitle { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public BookRentalStatus Status { get; set; }        
     }
 }

@@ -97,6 +97,11 @@ namespace LivlogNoDI.Services
                 .ToList();
         }
 
+        public int GetBookQuantity(BookDTO bookDTO)
+        {
+            return bookDTO.Quantity;
+        }
+
         #endregion
 
     }

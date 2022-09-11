@@ -74,20 +74,37 @@ namespace LivlogNoDI.Controllers
             => Ok(_service.ReturnBooks(customerbookIds));
 
         /// <summary>
-        /// Enviar email para avisar ao cliente que ele deve fazer a devolução do livro no dia seguinte.
+        /// Renovar aluguel de livro de cliente.
         /// </summary>
         /// <returns></returns>
-        [HttpPost("send-reminder")]
-        public ActionResult SendReminderToCustomer([FromBody] int customerId)
-            => Ok(_service.SendReminderToCustomer(customerId));
+        [HttpPost("renewal")]
+        public ActionResult<CustomerBookDTO> RenewBookRental(IList<int> customerBookId)
+            => Ok(_service.RenewBookRental(customerBookId));
 
-        // Renovar aluguel de livro de cliente.
+        /// <summary>
+        /// Obter a lista de esperas de um determinado livro.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{bookId}/waiting-list")]
+        public ActionResult<IEnumerable<CustomerBookDTO>> GetWaitingList([FromRoute] int bookId)
+            => Ok(_service.GetWaitingList(bookId));
 
-        // Adicionar cliente na lista de espera por livro.
+        /// <summary>
+        /// Adicionar cliente na lista de espera por livro.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("waiting-list")]
+        public ActionResult<CustomerBookDTO> AddToWaitingList(
+            [FromBody] CustomerBooksRequestDTO request) 
+                => Ok(_service.AddToWaitingList(request));
 
-        // Remover cliente da lista de espera por livro.
-
-        // Obter relatório sobre os alugueis de livros.
-
+        /// <summary>
+        /// Remover cliente da lista de espera por livro.
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete("waiting-list/{customerBookId}")]
+        public ActionResult<bool> RemoveFromWaitingList(int customerBookId)
+            => Ok(_service.RemoveFromWaitingList(customerBookId));
     }
 }

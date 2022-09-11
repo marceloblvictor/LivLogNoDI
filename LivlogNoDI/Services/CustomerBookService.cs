@@ -1,4 +1,5 @@
-﻿using LivlogNoDI.Data.Repositories;
+﻿using System.Net;
+using LivlogNoDI.Data.Repositories;
 using LivlogNoDI.Enums;
 using LivlogNoDI.Models.DTO;
 using LivlogNoDI.Models.Entities;
@@ -79,7 +80,7 @@ namespace LivlogNoDI.Services
                 .GetAll()
                 .ToList();
 
-            _rentalValidator.ValidateCustomerIsInDebt(
+            _rentalValidator.ValidateCustomerNotInDebt(
                 allFines, 
                 customer);
 
@@ -117,11 +118,33 @@ namespace LivlogNoDI.Services
 
             var customerBooksCreated = new List<CustomerBook>();
 
-            // Cria uma nova entidade CustomerBook para cada livro alugado
+            // Cria uma nova entidade CustomerBook para cada livro alugado além de remover o registro da lista de espera
             foreach (int bookId in request.BookIds)
             {
+                var allBooksWaitingList = FilterByStatus(
+                    GetAll(),
+                    BookRentalStatus.WaitingQueue);
+
+                var bookWaitingList = FilterByBooks(
+                    allBooksWaitingList,
+                    new List<int>() { bookId });
+
+                _rentalValidator.ValidateBookWaitingQueue(
+                    bookWaitingList,
+                    allFines,
+                    customer.Id);
+
+                RemoveFromWaitingQueueByCustomerAndBook(customer.Id, bookId);
+
                 customerBooksCreated.Add(
-                    _repo.Add(CreateEntity(request.CustomerId, bookId, customerDueDate)));
+                    _repo.Add(CreateEntity(new CustomerBookDTO()
+                    {
+                        CustomerId = request.CustomerId,
+                        BookId = bookId,
+                        StartDate = currentDateTime,
+                        DueDate = customerDueDate,
+                        Status = BookRentalStatus.Active
+                    })));
             }
 
             // Retorna uma lista com informações dos livros alugados pelo cliente
@@ -130,13 +153,26 @@ namespace LivlogNoDI.Services
             return rentedBookDtos;
         }
 
+        public IList<CustomerBookDTO> GetWaitingList(int bookId)
+        {
+            var waitedBooks = FilterByStatus(
+                GetAll(), 
+                BookRentalStatus.WaitingQueue);
+
+            var bookWaitingList = FilterByBooks(
+                waitedBooks,
+                new List<int> { bookId });
+
+            return bookWaitingList;
+        }
+
         public IList<CustomerBookDTO> ReturnBooks(IList<int> customerBookIds)
         {
             var returnedCustomerBooks = FilterByIds(
                 GetAll(), 
                 customerBookIds);
 
-            _rentalValidator.ValidateReturnedBooksSameCustomer(
+            _rentalValidator.ValidateCustomerBooksSameCustomer(
                 returnedCustomerBooks);
 
             DateTime currentDateTime = DateTime.Now;
@@ -149,7 +185,9 @@ namespace LivlogNoDI.Services
             {
                 if (IsReturnedBookOverdue(returnedBook, currentDateTime))
                 {
-                    var overdueDays = GetOverdueDays(returnedBook.DueDate, currentDateTime);
+                    var overdueDays = GetOverdueDays(
+                        returnedBook.DueDate.Value, 
+                        currentDateTime);
 
                     _fineService.FineCustomer(
                         returnedBook.CustomerId,
@@ -177,7 +215,142 @@ namespace LivlogNoDI.Services
             return true;
         }
 
+        public IEnumerable<CustomerBookDTO> RenewBookRental(IList<int> customerBookIds)
+        {                        
+            var booksToBeRenewed = FilterByIds(
+                GetAll(), 
+                customerBookIds);
+
+            _rentalValidator.ValidateCustomerBooksSameCustomer(
+                booksToBeRenewed);
+
+            _rentalValidator.ValidateRenewalOnlyInDueDate(
+                booksToBeRenewed);
+
+            var customer = _customerService.Get(
+                booksToBeRenewed.First().CustomerId);
+
+            var allFines = _fineService
+                .GetAll()
+                .ToList();
+
+            _rentalValidator.ValidateCustomerNotInDebt(
+                allFines,
+                customer);
+
+            var allBooksWaitingList = FilterByStatus(
+                GetAll(),
+                BookRentalStatus.WaitingQueue);
+
+            foreach (var bookToBeRenewed in booksToBeRenewed)
+            {
+                var bookWaitingList = FilterByBooks(
+                    allBooksWaitingList,
+                    new List<int>() { bookToBeRenewed.BookId });
+
+                _rentalValidator.ValidateBookWaitingQueue(
+                    bookWaitingList,
+                    allFines,
+                    customer.Id);
+                
+                // Renova o prazo de devolução
+                bookToBeRenewed.DueDate = CalculateDueDate(
+                    customer, 
+                    bookToBeRenewed.DueDate.Value);
+
+                Update(bookToBeRenewed.Id, bookToBeRenewed);
+            }
+
+            return booksToBeRenewed;
+        }
+
+        public List<CustomerBookDTO> AddToWaitingList(CustomerBooksRequestDTO request)
+        {
+            var customer = _customerService.Get(request.CustomerId);
+
+            var allCustomerBooks = GetAll();
+
+            var booksToWait = _bookService.FilterByIds(
+                _bookService.GetAll(), 
+                request.BookIds);
+
+            var waitedBooks = new List<CustomerBookDTO>();
+
+            var activeCustomerBooks =
+                    FilterByStatus(
+                        FilterByBooks(
+                            GetAll(), 
+                            request.BookIds),
+                        BookRentalStatus.Active);
+
+            foreach (var bookToWait in booksToWait)
+            {
+                _rentalValidator.ValidateIfCustomerIsAlreadyInQueueOrHasTheBook(
+                    customer,
+                    bookToWait.Id,
+                    allCustomerBooks);
+
+                var bookQuantity = _bookService.GetBookQuantity(
+                    bookToWait);
+
+                _rentalValidator.ValidateAnyFreeBook(
+                    activeCustomerBooks, 
+                    bookQuantity);
+
+                var waitingBook = CreateEntity(new CustomerBookDTO()
+                {
+                    BookId = bookToWait.Id,
+                    CustomerId = customer.Id,
+                    StartDate = null,
+                    DueDate = null,
+                    Status = BookRentalStatus.WaitingQueue
+                });
+
+                waitedBooks.Add(
+                    CreateDTO(_repo.Add(waitingBook)));
+            }
+
+            return waitedBooks;
+        }
+
+        public bool RemoveFromWaitingList(int customerBookId)
+        {
+            var customerBook = Get(customerBookId);
+
+            _rentalValidator.ValidateWaitedBookStatus(customerBook);
+
+            return Delete(customerBookId);
+        }
+
+        public bool RemoveFromWaitingQueueByCustomerAndBook(int customerId, int bookId)
+        {
+            var customerBooks = GetByCostumerAndBook(
+                customerId, 
+                bookId);
+
+            var waitedCustomerBooks = FilterByStatus(
+                customerBooks, 
+                BookRentalStatus.WaitingQueue);
+
+            foreach (var waitedCustomerBook in waitedCustomerBooks)
+            {
+                RemoveFromWaitingList(waitedCustomerBook.Id);
+            }
+
+            return true;
+        }
+
         #region Helper Methods
+
+        public IList<CustomerBookDTO> GetByCostumerAndBook(
+            int customerId,
+            int bookId)
+        {
+            return GetAll()
+                .Where(cb => cb.CustomerId == customerId &&
+                             cb.BookId == bookId)
+                .ToList();
+        }
 
         public IList<CustomerBookDTO> SetCustomerBookStatusToReturned(IList<CustomerBookDTO> returnedCustomerBooks)
         {
@@ -233,6 +406,15 @@ namespace LivlogNoDI.Services
         {
             return dtos
                 .Where(dto => dto.CustomerId == customerId)
+                .ToList();
+        }
+
+        private IList<CustomerBookDTO> FilterByBooks(
+            IList<CustomerBookDTO> dtos, 
+            IList<int> bookIds)
+        {
+            return dtos
+                .Where(dto => bookIds.Contains(dto.BookId))
                 .ToList();
         }
 
@@ -293,17 +475,15 @@ namespace LivlogNoDI.Services
         }
 
         public CustomerBook CreateEntity(
-            int customerId, 
-            int bookId, 
-            DateTime dueDate)
+            CustomerBookDTO dto)
         {
             return new CustomerBook
             {
-                BookId = bookId,
-                CustomerId = customerId,
-                StartDate = DateTime.Now,
-                DueDate = dueDate,
-                Status = BookRentalStatus.Active
+                BookId = dto.BookId,
+                CustomerId = dto.CustomerId,
+                StartDate = dto.StartDate,
+                DueDate = dto.DueDate,
+                Status = dto.Status
             };
         }
 

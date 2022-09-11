@@ -5,7 +5,7 @@ namespace LivlogNoDI.Validators
 {
     public class BookRentalValidator
     {
-        public void ValidateCustomerIsInDebt(
+        public void ValidateCustomerNotInDebt(
             IList<FineDTO> allFines, 
             CustomerDTO customer)
         {
@@ -50,7 +50,7 @@ namespace LivlogNoDI.Validators
             }
         }
 
-        public void ValidateReturnedBooksSameCustomer(
+        public void ValidateCustomerBooksSameCustomer(
             IList<CustomerBookDTO> returnedBooks)
         {
             bool isSameCustomer = returnedBooks
@@ -60,7 +60,7 @@ namespace LivlogNoDI.Validators
 
             if (!isSameCustomer)
             {
-                throw new Exception("O retorno de livros só pode ser feito em relação a um usuário por vez");
+                throw new Exception("O retorno de livros ou a renovação do empréstimo só podem ser feito em relação a um usuário por vez");
             }
         }
 
@@ -74,6 +74,74 @@ namespace LivlogNoDI.Validators
             if (returnedBook.Status == BookRentalStatus.Returned)
             {
                 throw new Exception("Este livro já foi devolvido");
+            }
+        }
+
+        public void ValidateBookWaitingQueue(
+            IList<CustomerBookDTO> bookWaitingList,
+            IList<FineDTO> allFines,
+            int customerId)
+        {
+            var customersInDebt = allFines
+                .Where(f => f.Status == FineStatus.Active)
+                .Select(f => f.CustomerId)
+                .ToList();
+
+            // Verifica se tem algum cliente na lista de esperas sem débitos e se o cliente não está na lista de espera
+            if (bookWaitingList.Count() > 0 &&
+                !bookWaitingList
+                    .Select(cb => cb.CustomerId)
+                    .Contains(customerId) &&
+                bookWaitingList.Any(b => !customersInDebt.Contains(b.CustomerId)))
+            {
+                throw new Exception("O empréstimo do livro não pode ser iniciado ou renovado porque existem clientes na fila de espera");
+            }
+        }
+
+        public void ValidateAnyFreeBook(
+            IList<CustomerBookDTO> activeCustomerBooks,
+            int bookQuantity)
+        {
+            if (activeCustomerBooks.Count() < bookQuantity)
+            {
+                throw new Exception("Existem exemplares disponíveis para empréstimo do livro especificado");
+            }
+        }
+
+        public void ValidateRenewalOnlyInDueDate(
+            IList<CustomerBookDTO> booksToBeRenewed)
+        {
+           if (booksToBeRenewed.Any(b => b.DueDate.Value.DayOfYear !=  DateTime.Now.DayOfYear))
+           {
+                throw new Exception("Empréstimos só podem ser renovados na data de devolução do livro");
+           }
+        }
+
+        public void ValidateIfCustomerIsAlreadyInQueueOrHasTheBook(
+            CustomerDTO customer,
+            int bookId,
+            IList<CustomerBookDTO> allCustomerBooks)
+        {
+            if (allCustomerBooks.Any(cb => cb.CustomerId == customer.Id &&
+                                      cb.BookId == bookId &&
+                                      cb.Status == BookRentalStatus.WaitingQueue))
+            {
+                throw new Exception("O cliente já se encontra na lista de espera do livro");
+            }
+
+            if (allCustomerBooks.Any(cb => cb.CustomerId == customer.Id &&
+                                      cb.BookId == bookId &&
+                                      cb.Status == BookRentalStatus.Active))
+            {
+                throw new Exception("O cliente já se encontra na posse do livro");
+            }
+        }
+
+        public void ValidateWaitedBookStatus(CustomerBookDTO customerBook)
+        {
+            if (customerBook.Status != BookRentalStatus.WaitingQueue)
+            {
+                throw new Exception("Não pode ser removido da lista de espera um aluguel ativo ou concluído");
             }
         }
     }
