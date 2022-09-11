@@ -4,6 +4,7 @@ using LivlogNoDI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LivlogNoDI.Migrations
 {
     [DbContext(typeof(LivlogNoDIContext))]
-    partial class LivlogNoDIContextModelSnapshot : ModelSnapshot
+    [Migration("20220911222036_CreateUserEntity")]
+    partial class CreateUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

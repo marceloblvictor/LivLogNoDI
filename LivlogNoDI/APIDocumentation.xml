@@ -4,6 +4,31 @@
         <name>LivlogNoDI</name>
     </assembly>
     <members>
+        <member name="M:LivlogNoDI.Controllers.AuthController.GetAllUsers">
+            <summary>
+            Obter todos os usuários
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.AuthController.SignUp(LivlogNoDI.Models.DTO.UserDTO)">
+            <summary>
+            Registrar novo usuário
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.AuthController.Authenticate(LivlogNoDI.Models.DTO.UserDTO)">
+            <summary>
+            Realizar login com nome de usuário e senha
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LivlogNoDI.Controllers.AuthController.Delete(System.Int32)">
+            <summary>
+            Deletar um usuário.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:LivlogNoDI.Controllers.BooksController.GetAll">
             <summary>
             Obter todos os livros.

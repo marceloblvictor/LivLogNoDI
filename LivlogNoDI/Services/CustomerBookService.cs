@@ -1,5 +1,4 @@
-﻿using System.Net;
-using LivlogNoDI.Data.Repositories;
+﻿using LivlogNoDI.Data.Repositories;
 using LivlogNoDI.Enums;
 using LivlogNoDI.Models.DTO;
 using LivlogNoDI.Models.Entities;
@@ -153,19 +152,6 @@ namespace LivlogNoDI.Services
             return rentedBookDtos;
         }
 
-        public IList<CustomerBookDTO> GetWaitingList(int bookId)
-        {
-            var waitedBooks = FilterByStatus(
-                GetAll(), 
-                BookRentalStatus.WaitingQueue);
-
-            var bookWaitingList = FilterByBooks(
-                waitedBooks,
-                new List<int> { bookId });
-
-            return bookWaitingList;
-        }
-
         public IList<CustomerBookDTO> ReturnBooks(IList<int> customerBookIds)
         {
             var returnedCustomerBooks = FilterByIds(
@@ -262,6 +248,19 @@ namespace LivlogNoDI.Services
             }
 
             return booksToBeRenewed;
+        }
+
+        public IList<CustomerBookDTO> GetWaitingList(int bookId)
+        {
+            var waitedBooks = FilterByStatus(
+                GetAll(),
+                BookRentalStatus.WaitingQueue);
+
+            var bookWaitingList = FilterByBooks(
+                waitedBooks,
+                new List<int> { bookId });
+
+            return bookWaitingList;
         }
 
         public List<CustomerBookDTO> AddToWaitingList(CustomerBooksRequestDTO request)

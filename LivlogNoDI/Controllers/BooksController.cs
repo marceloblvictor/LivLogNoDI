@@ -1,11 +1,13 @@
 ﻿using LivlogNoDI.Models.DTO;
 using LivlogNoDI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LivlogNoDI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BooksController : ControllerBase
     {
         private readonly BookService _service;

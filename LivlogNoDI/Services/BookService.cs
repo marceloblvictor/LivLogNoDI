@@ -55,7 +55,9 @@ namespace LivlogNoDI.Services
             return _repo.Delete(id);            
         }
 
-        private BookDTO CreateDTO(Book book)
+        #region Helper Methods
+
+        public BookDTO CreateDTO(Book book)
         {
             return new BookDTO
             {
@@ -66,7 +68,6 @@ namespace LivlogNoDI.Services
             };
         }
 
-        #region Helper Methods
         public IEnumerable<BookDTO> CreateDTOs(IEnumerable<Book> books)
         {
             var booksDtos = new List<BookDTO>();

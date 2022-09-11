@@ -22,6 +22,7 @@ namespace LivlogNoDI.Data
         public DbSet<Customer> Customers { get; set; } = default!;
         public DbSet<CustomerBook> CustomerBooks { get; set; } = default!;
         public DbSet<Fine> Fines { get; set; } = default!;
+        public DbSet<User> Users { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
