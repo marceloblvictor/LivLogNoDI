@@ -111,6 +111,8 @@ namespace LivlogNoDI.Services
 
         public string GenerateToken(UserDTO user)
         {
+            _validator.ValidateUserClaimsData(user);
+
             var securityKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(JWT.JWT_KEY));
 
