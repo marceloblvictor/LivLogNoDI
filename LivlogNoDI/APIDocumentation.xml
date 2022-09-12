@@ -24,7 +24,7 @@
         </member>
         <member name="M:LivlogNoDI.Controllers.AuthController.Delete(System.Int32)">
             <summary>
-            Deletar um usuário.
+            Deletar um usuário
             </summary>
             <param name="id"></param>
             <returns></returns>

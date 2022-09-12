@@ -1,4 +1,5 @@
-﻿using LivlogNoDI.Data.Repositories;
+﻿using LivlogNoDI.Constants;
+using LivlogNoDI.Data.Repositories;
 using LivlogNoDI.Enums;
 using LivlogNoDI.Models.DTO;
 using LivlogNoDI.Models.Entities;
@@ -10,22 +11,20 @@ namespace LivlogNoDI.Services
     public class CustomerBookService
     {
         private readonly CustomerBookRepository _repo;
-
         private readonly CustomerService _customerService;
         private readonly BookService _bookService;
         private readonly FineService _fineService;
-
         private readonly BookRentalValidator _rentalValidator;
+        private readonly MessagerService _messager;
         
         public CustomerBookService()
         {
             _repo = new CustomerBookRepository();
-
             _customerService = new CustomerService();
             _bookService = new BookService();
             _fineService = new FineService();
-
             _rentalValidator = new BookRentalValidator();
+            _messager = new MessagerService();
         }
 
         public CustomerBookDTO Get(int id)
@@ -135,15 +134,22 @@ namespace LivlogNoDI.Services
 
                 RemoveFromWaitingQueueByCustomerAndBook(customer.Id, bookId);
 
-                customerBooksCreated.Add(
-                    _repo.Add(CreateEntity(new CustomerBookDTO()
-                    {
-                        CustomerId = request.CustomerId,
-                        BookId = bookId,
-                        StartDate = currentDateTime,
-                        DueDate = customerDueDate,
-                        Status = BookRentalStatus.Active
-                    })));
+                var bookCreated = _repo.Add(CreateEntity(new CustomerBookDTO()
+                {
+                    CustomerId = request.CustomerId,
+                    BookId = bookId,
+                    StartDate = currentDateTime,
+                    DueDate = customerDueDate,
+                    Status = BookRentalStatus.Active
+                }));
+
+                customerBooksCreated.Add(bookCreated);
+
+                _messager.SendEmail(
+                    "from@example.com", 
+                    "to@example.com", 
+                    Messages.BOOK_RENTED_SUBJECT, 
+                    string.Format(Messages.BOOK_RENTED_BODY, customer.Name, bookCreated.Book.Title, bookCreated.DueDate));
             }
 
             // Retorna uma lista com informações dos livros alugados pelo cliente
@@ -187,18 +193,9 @@ namespace LivlogNoDI.Services
             foreach (var returnedBook in returnedCustomerBooks)
             {
                 Update(returnedBook.Id, returnedBook);
-            }
-
-            // SendReturnalNotification();
+            }            
 
             return returnedCustomerBooks;
-        }
-
-        public bool SendReminderToCustomer(int customerId)
-        {
-            // _messager.SendEmail();
-
-            return true;
         }
 
         public IEnumerable<CustomerBookDTO> RenewBookRental(IList<int> customerBookIds)

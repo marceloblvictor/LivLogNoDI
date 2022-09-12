@@ -42,7 +42,7 @@ namespace LivlogNoDI.Controllers
             => Ok(_service.Authenticate(dto));
 
         /// <summary>
-        /// Deletar um usuário.
+        /// Deletar um usuário
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

@@ -1,9 +1,35 @@
-﻿namespace LivlogNoDI.Services
+﻿using System.Net.Mail;
+using System.Net;
+using LivlogNoDI.Constants;
+
+namespace LivlogNoDI.Services
 {
     public class MessagerService
     {
-        public MessagerService()
+        public bool SendEmail(string from, string to, string subject, string body)
         {
+            var username = Mailing.USERNAME; // Mailtrap
+            var password = Mailing.PASSWORD; // Mailtrap
+            var host = Mailing.HOST;
+            var port = Mailing.PORT;
+
+            var client = new SmtpClient(host, port)
+            {
+                Credentials = new NetworkCredential(username, password),
+                EnableSsl = true
+            };
+
+            try
+            {
+                // TODO: código comentado para não encher o inbox do Mailtrap.
+                //client.Send(from, to, subject, body);            
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return true;
         }
     }
 }
