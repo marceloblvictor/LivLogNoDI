@@ -1,5 +1,4 @@
 ﻿using LivlogNoDI.Models.DTO;
-using LivlogNoDI.Models.Entities;
 
 namespace LivlogNoDI.Validators
 {
@@ -12,7 +11,7 @@ namespace LivlogNoDI.Validators
                 throw new Exception("O nome de usuário fornecido já se encontra em utilização");
             }
 
-            if (dto.Password is { Length: < 6 })
+            if (dto.Password.Length < 6 )
             {
                 throw new Exception("A senha deve possuir no mínimo 6 caracteres");
             }
@@ -23,8 +22,8 @@ namespace LivlogNoDI.Validators
             }
         }
 
-        internal void ValidateUserClaimsData(UserDTO user)
-{
+        public void ValidateUserClaimsData(UserDTO user)
+        {
             if (string.IsNullOrWhiteSpace(user.Email) ||
                 string.IsNullOrWhiteSpace(user.Username))
             {

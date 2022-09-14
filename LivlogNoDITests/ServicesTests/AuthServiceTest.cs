@@ -1,9 +1,8 @@
-using LivlogNoDI.Data.Repositories;
 using LivlogNoDI.Models.DTO;
 using LivlogNoDI.Models.Entities;
 using LivlogNoDI.Services;
 
-namespace LivlogNoDITests
+namespace LivlogNoDITests.ServicesTests
 {
     public class AuthServiceTest
     {
@@ -92,7 +91,7 @@ namespace LivlogNoDITests
         public AuthServiceTest()
         {
             _service = new AuthService();
-        }        
+        }
 
         [Fact]
         public void GetUserByUserName_ValidUsernameGiven_ReturnsUserWithGivenUsername()
@@ -277,7 +276,7 @@ namespace LivlogNoDITests
 
             foreach (var dto in dtos)
             {
-                var validUser = 
+                var validUser =
                     validUsers.First(u => u.Id == dto.Id);
 
                 Assert.True(dto.Id == validUser.Id);

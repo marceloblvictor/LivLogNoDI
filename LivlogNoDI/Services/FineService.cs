@@ -103,19 +103,7 @@ namespace LivlogNoDI.Services
             return _repo.Delete(id);            
         }
 
-        #region Helper Methods
-
-        public FineDTO CreateDTO(Fine fine)
-        {
-            return new FineDTO
-            {
-                Id = fine.Id,
-                Amount = fine.Amount,
-                Status = fine.Status,
-                CustomerName = fine.Customer.Name,
-                CustomerId = fine.CustomerId,
-            };
-        }
+        #region Helper Methods        
 
         public decimal CalculateFineAmount(CustomerCategory category, int overdueDays)
         {
@@ -133,6 +121,19 @@ namespace LivlogNoDI.Services
 
                 _ => throw new ArgumentException()
             };
+
+        public FineDTO CreateDTO(Fine fine)
+        {
+            return new FineDTO
+            {
+                Id = fine.Id,
+                Amount = fine.Amount,
+                Status = fine.Status,
+                CustomerName = fine.Customer.Name,
+                CustomerId = fine.CustomerId,
+            };
+        }
+
 
         public IEnumerable<FineDTO> CreateDTOs(IEnumerable<Fine> fines)
         {

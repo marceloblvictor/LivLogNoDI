@@ -66,7 +66,7 @@ namespace LivlogNoDI.Services
             return customer.Category;
         }
 
-        private CustomerDTO CreateDTO(Customer customer)
+        public CustomerDTO CreateDTO(Customer customer)
         {
             return new CustomerDTO
             {
@@ -78,7 +78,7 @@ namespace LivlogNoDI.Services
             };
         }
 
-        private IEnumerable<CustomerDTO> CreateDTOs(IEnumerable<Customer> customers)
+        public IEnumerable<CustomerDTO> CreateDTOs(IEnumerable<Customer> customers)
         {
             var customerDtos = new List<CustomerDTO>();
 
@@ -90,7 +90,7 @@ namespace LivlogNoDI.Services
             return customerDtos;
         }
 
-        private Customer CreateEntity(CustomerDTO dto)
+        public Customer CreateEntity(CustomerDTO dto)
         {
             return new Customer
             {
