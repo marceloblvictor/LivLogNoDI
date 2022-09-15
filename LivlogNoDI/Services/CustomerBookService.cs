@@ -336,8 +336,6 @@ namespace LivlogNoDI.Services
             return true;
         }
 
-        #region Helper Methods
-
         public IList<CustomerBookDTO> GetByCostumerAndBook(
             int customerId,
             int bookId)
@@ -348,7 +346,10 @@ namespace LivlogNoDI.Services
                 .ToList();
         }
 
-        public IList<CustomerBookDTO> SetCustomerBookStatusToReturned(IList<CustomerBookDTO> returnedCustomerBooks)
+        #region Helper Methods
+
+        public IList<CustomerBookDTO> SetCustomerBookStatusToReturned(
+            IList<CustomerBookDTO> returnedCustomerBooks)
         {
             foreach (var returnedBook in returnedCustomerBooks)
             {
@@ -475,6 +476,7 @@ namespace LivlogNoDI.Services
         {
             return new CustomerBook
             {
+                Id = dto.Id,
                 BookId = dto.BookId,
                 CustomerId = dto.CustomerId,
                 StartDate = dto.StartDate,
