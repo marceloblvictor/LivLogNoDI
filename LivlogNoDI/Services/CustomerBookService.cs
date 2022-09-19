@@ -370,7 +370,9 @@ namespace LivlogNoDI.Services
             CustomerBookDTO customerBook,
             DateTime returnDate)
         {
-            return returnDate > customerBook.DueDate;
+            var result = returnDate > customerBook.DueDate;
+
+            return result;
         }
 
         public DateTime CalculateDueDate(CustomerDTO customer, DateTime startTime)
@@ -406,7 +408,7 @@ namespace LivlogNoDI.Services
                 .ToList();
         }
 
-        private IList<CustomerBookDTO> FilterByBooks(
+        public IList<CustomerBookDTO> FilterByBooks(
             IList<CustomerBookDTO> dtos, 
             IList<int> bookIds)
         {

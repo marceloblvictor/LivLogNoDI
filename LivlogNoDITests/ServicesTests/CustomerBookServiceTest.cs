@@ -452,6 +452,23 @@ namespace LivlogNoDITests.ServicesTests
         }
 
         [Fact]
+        public void IsReturnedBookOverdue_GivenSameDates_ReturnsFalse()
+        {
+            // Arrange
+            var returnDate = new DateTime(2022, 12, 31);
+            var dueDate = new DateTime(2022, 12, 31);
+
+            var validCustomerBookDto = ValidCustomerBookActiveDTO;
+            validCustomerBookDto.DueDate = dueDate;
+
+            // Act
+            var result = _service.IsReturnedBookOverdue(validCustomerBookDto, returnDate);
+
+            // Assert
+            Assert.True(result is false);
+        }
+
+        [Fact]
         public void CalculateDueDate_GivenStartDate_ReturnsCorrectDueDate()
         {
             // Arrange
@@ -499,6 +516,96 @@ namespace LivlogNoDITests.ServicesTests
             Assert.Throws<ArgumentException>(operation);
         }
 
+        [InlineData(Top, 5)]
+        [InlineData(Medium, 3)]
+        [InlineData(Low, 1)]
+        [Theory]
+        public void GetCustomerRentalsMaxLimit_GivenCategory_ReturnsCorrectMaxLimit(
+            CustomerCategory category,
+            int correctDuration)
+        {
+            // Act
+            var result = _service.GetCustomerRentalsMaxLimit(category);
+
+            // Assert
+            Assert.Equal(correctDuration, result);
+        }
+
+        [Fact]
+        public void GetCustomerRentalsMaxLimit_GivenInvalidCategory_ThrowsArgumentException()
+        {
+            // Arrange
+            var invalidCategory = InvalidCategory;
+
+            // Act
+            var operation = () =>
+            {
+                _service.GetCustomerRentalsMaxLimit(invalidCategory);
+            };
+
+            // Assert
+            Assert.Throws<ArgumentException>(operation);
+        }
+
+        [Fact]
+        public void FilterByCustomer_GivenValidIds_ReturnCorrectData()
+        {
+            // Arrange
+            var validCustomerId = 1;
+            var validDtos = ValidCustomerBooksDTOs;
+
+            // Act
+            var filteredDtos = _service.FilterByCustomer(validDtos, validCustomerId);
+
+            // Assert
+            Assert.True(filteredDtos.All(dto => dto.CustomerId == validCustomerId));
+        }
+
+        [Fact]
+        public void FilterByBooks_GivenValidIds_ReturnCorrectData()
+        {
+            // Arrange
+            var validBookId= 1;
+            var validDtos = ValidCustomerBooksDTOs;
+
+            // Act
+            var filteredDtos = _service.FilterByBooks(validDtos, new List<int> { validBookId });
+
+            // Assert
+            Assert.True(filteredDtos.All(dto => dto.BookId == validBookId));
+        }
+
+        [Fact]
+        public void FilterByIds_GivenValidIds_ReturnCorrectData()
+        {
+            // Arrange
+            var validBookCustomerId = 1;
+            var validDtos = ValidCustomerBooksDTOs;
+
+            // Act
+            var filteredDtos = _service.FilterByIds(validDtos, new List<int> { validBookCustomerId });
+
+            // Assert
+            Assert.True(filteredDtos.All(dto => dto.Id == validBookCustomerId));
+        }
+
+        [Theory]
+        [InlineData(Active)]
+        [InlineData(WaitingQueue)]
+        [InlineData(Returned)]
+        public void FilterByStatus_GivenValidIds_ReturnCorrectData(BookRentalStatus status)
+        {
+            // Arrange
+            var validStatus = status;
+            var validDtos = ValidCustomerBooksDTOs;
+
+            // Act
+            var filteredDtos = _service.FilterByStatus(validDtos, validStatus);
+
+            // Assert
+            Assert.True(filteredDtos.All(dto => dto.Status == validStatus));
+        }
+
         [Fact]
         public void FilterByCostumerAndBook_GivenValidIds_ReturnCorrectData()
         {
@@ -510,7 +617,7 @@ namespace LivlogNoDITests.ServicesTests
             var filteredDtos = _service.FilterByCustomerAndBook(validDtos, validCustomerId, new[] { validBookId });
 
             // Assert
-            Assert.True(filteredDtos.Any(dto => dto.CustomerId == validCustomerId && dto.BookId == validBookId));
+            Assert.True(filteredDtos.All(dto => dto.CustomerId == validCustomerId && dto.BookId == validBookId));
         }
 
         [Fact]
