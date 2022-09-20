@@ -87,12 +87,14 @@ namespace LivlogNoDI.Validators
                 .Select(f => f.CustomerId)
                 .ToList();
 
+            bool isThereWaitingList = bookWaitingList.Count() > 0;
+            bool isCustomerInWaitingQueue = bookWaitingList.Select(cb => cb.CustomerId).Contains(customerId);
+            bool isCustomerInDebt = bookWaitingList.Any(b => !customersInDebt.Contains(b.CustomerId));
+
             // Verifica se tem algum cliente na lista de esperas sem débitos e se o cliente não está na lista de espera
-            if (bookWaitingList.Count() > 0 &&
-                !bookWaitingList
-                    .Select(cb => cb.CustomerId)
-                    .Contains(customerId) &&
-                bookWaitingList.Any(b => !customersInDebt.Contains(b.CustomerId)))
+            if (isThereWaitingList && 
+                !isCustomerInWaitingQueue &&
+                !isCustomerInDebt)
             {
                 throw new Exception("O empréstimo do livro não pode ser iniciado ou renovado porque existem clientes na fila de espera");
             }

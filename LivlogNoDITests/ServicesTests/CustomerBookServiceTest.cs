@@ -51,46 +51,6 @@ namespace LivlogNoDITests.ServicesTests
             },
         };
 
-        BookDTO ValidBookDTO { get; set; } = new()
-        {
-            Id = 1,
-            Title = "LivroTeste1",
-            ISBN = "teste1",
-            Quantity = 5
-        };
-
-        IList<BookDTO> ValidBookDTOs = new List<BookDTO>()
-        {
-            new()
-            {
-                Id = 1,
-                Title = "LivroTeste1",
-                ISBN = "teste1",
-                Quantity = 5
-            },
-            new()
-            {
-                Id = 2,
-                Title = "LivroTeste2",
-                ISBN = "teste2",
-                Quantity = 5
-            },
-            new()
-            {
-                Id = 3,
-                Title = "LivroTeste3",
-                ISBN = "teste3",
-                Quantity = 5
-            },
-            new()
-            {
-                Id = 4,
-                Title = "LivroTeste4",
-                ISBN = "teste4",
-                Quantity = 5
-            },
-        };
-
         Customer ValidCustomer { get; set; } = new()
         {
             Id = 1,
@@ -98,43 +58,7 @@ namespace LivlogNoDITests.ServicesTests
             Phone = "98534542767",
             Email = "marceloblvictor@gmail.com",
             Category = (CustomerCategory)1
-        };
-
-        IList<Customer> ValidCustomers = new List<Customer>()
-        {
-            new()
-            {
-                Id = 1,
-                Name = "marceloblvictor",
-                Phone = "98534542767",
-                Email = "marceloblvictor@gmail.com",
-                Category = (CustomerCategory) 1
-            },
-            new ()
-            {
-                Id = 2,
-                Name = "marceloblvictor2",
-                Phone = "98534542753",
-                Email = "marceloblvictor2@gmail.com",
-                Category = (CustomerCategory) 2
-            },
-            new()
-            {
-                Id = 3,
-                Name = "marceloblvictor3",
-                Phone = "98534542732",
-                Email = "marceloblvictor3@gmail.com",
-                Category = (CustomerCategory) 3
-            },
-            new()
-            {
-                Id = 4,
-                Name = "marceloblvictor4",
-                Phone = "98534542712",
-                Email = "marceloblvictor4@gmail.com",
-                Category = (CustomerCategory) 3
-            },
-        };
+        };     
 
         CustomerDTO ValidCustomerDTO { get; set; } = new()
         {
@@ -145,42 +69,6 @@ namespace LivlogNoDITests.ServicesTests
             Category = (CustomerCategory)1
         };
 
-        IList<CustomerDTO> ValidCustomerDTOs = new List<CustomerDTO>()
-        {
-            new()
-            {
-                Id = 1,
-                Name = "marceloblvictor",
-                Phone = "98534542767",
-                Email = "marceloblvictor@gmail.com",
-                Category = (CustomerCategory) 1
-            },
-            new ()
-            {
-                Id = 2,
-                Name = "marceloblvictor2",
-                Phone = "98534542753",
-                Email = "marceloblvictor2@gmail.com",
-                Category = (CustomerCategory) 2
-            },
-            new()
-            {
-                Id = 3,
-                Name = "marceloblvictor3",
-                Phone = "98534542732",
-                Email = "marceloblvictor3@gmail.com",
-                Category = (CustomerCategory) 3
-            },
-            new()
-            {
-                Id = 4,
-                Name = "marceloblvictor4",
-                Phone = "98534542712",
-                Email = "marceloblvictor4@gmail.com",
-                Category = (CustomerCategory) 3
-            },
-        };
-
         CustomerBook ValidCustomerBookActive { get; set; } = new()
         {
             Id = 1,
@@ -189,27 +77,7 @@ namespace LivlogNoDITests.ServicesTests
             StartDate = new DateTime(2022, 09, 01),
             DueDate = new DateTime(2022, 10, 01),
             Status = Active
-        };
-
-        CustomerBook ValidCustomerBookWaiting { get; set; } = new()
-        {
-            Id = 2,
-            BookId = 2,
-            CustomerId = 1,
-            StartDate = null,
-            DueDate = null,
-            Status = WaitingQueue
-        };
-
-        CustomerBook ValidCustomerBookReturned{ get; set; } = new()
-        {
-            Id = 3,
-            BookId = 3,
-            CustomerId = 1,
-            StartDate = null,
-            DueDate = null,
-            Status = Returned
-        };
+        };   
 
         IList<CustomerBook> ValidCustomerBooks { get; set; } = new List<CustomerBook>()
         {
@@ -250,27 +118,7 @@ namespace LivlogNoDITests.ServicesTests
             StartDate = new DateTime(2022, 09, 01),
             DueDate = new DateTime(2022, 10, 01),
             Status = Active
-        };
-
-        CustomerBookDTO ValidCustomerBookWaitingDTO { get; set; } = new()
-        {
-            Id = 2,
-            BookId = 2,
-            CustomerId = 1,
-            StartDate = null,
-            DueDate = null,
-            Status = WaitingQueue
-        };
-
-        CustomerBookDTO ValidCustomerBookReturnedDTO { get; set; } = new()
-        {
-            Id = 3,
-            BookId = 3,
-            CustomerId = 1,
-            StartDate = null,
-            DueDate = null,
-            Status = Returned
-        };
+        };        
 
         IList<CustomerBookDTO> ValidCustomerBooksDTOs { get; set; } = new List<CustomerBookDTO>()
         {
@@ -301,79 +149,7 @@ namespace LivlogNoDITests.ServicesTests
                 DueDate = null,
                 Status = Returned
             }
-        };
-
-        IList<User> ValidUsers = new List<User>()
-        {
-            new()
-            {
-                Id = 1,
-                Username = "marceloblvictor",
-                Password = "abcdef1234",
-                Email = "marceloblvictor@gmail.com"
-            },
-            new()
-            {
-                Id = 2,
-                Username = "marceloblvictorXXX",
-                Password = "abcdef1234",
-                Email = "marceloblvictorXXX@gmail.com"
-            },
-            new()
-            {
-                Id = 3,
-                Username = "marceloblvictorYYY",
-                Password = "abcdef1234",
-                Email = "marceloblvictorYYY@gmail.com"
-            },
-            new()
-            {
-                Id = 4,
-                Username = "marceloblvictorZZZ",
-                Password = "abcdef1234",
-                Email = "marceloblvictorZZZ@gmail.com"
-            },
-        };
-
-        UserDTO ValidUserDTO { get; set; } = new()
-        {
-            Id = 1,
-            Username = "marceloblvictor",
-            Password = "abcdef1234",
-            Email = "marceloblvictor@gmail.com"
-        };
-
-        IList<UserDTO> ValidUsersDTOs = new List<UserDTO>()
-        {
-            new()
-            {
-                Id = 1,
-                Username = "marceloblvictor",
-                Password = "abcdef1234",
-                Email = "marceloblvictor@gmail.com"
-            },
-            new()
-            {
-                Id = 2,
-                Username = "marceloblvictorXXX",
-                Password = "abcdef1234",
-                Email = "marceloblvictorXXX@gmail.com"
-            },
-            new()
-            {
-                Id = 3,
-                Username = "marceloblvictorYYY",
-                Password = "abcdef1234",
-                Email = "marceloblvictorYYY@gmail.com"
-            },
-            new()
-            {
-                Id = 4,
-                Username = "marceloblvictorZZZ",
-                Password = "abcdef1234",
-                Email = "marceloblvictorZZZ@gmail.com"
-            },
-        };
+        };        
 
         public CustomerBookServiceTest()
         {
