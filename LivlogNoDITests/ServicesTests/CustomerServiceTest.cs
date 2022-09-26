@@ -102,21 +102,7 @@ namespace LivlogNoDITests.ServicesTests
         public CustomerServiceTest()
         {
             _service = new CustomerService();
-        }
-
-        [Fact]
-        public void GetCustomerCategory_ValidCustomerId_ReturnsCorrectCustomerCategory()
-        {
-            // Arrange
-            var validCustomer = ValidCustomer;
-
-            // Act
-            var result = _service.GetCustomerCategory(validCustomer.Id);
-
-            // Assert
-            Assert.Equal(validCustomer.Category, result);
-        }
-       
+        }               
 
         [Fact]
         public void CreateDTO_GenerateDTOWithEntityData_Succes()
